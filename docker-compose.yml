@@ -3,7 +3,8 @@ version: "3"
 services:
   api-gateway:
     build:
-      context: ./dockerfiles/api-gateway.dockerfile
+      context: .
+      dockerfile: api-gateway.Dockerfile
     ports:
       - "3001:3001"
     env_file:
@@ -16,7 +17,8 @@ services:
 
   partnership-client:
     build:
-      context: ./dockerfiles/client.dockerfile
+      context: .
+      dockerfile: client.Dockerfile
     ports:
       - "3000:80"
     mem_limit: 128m
