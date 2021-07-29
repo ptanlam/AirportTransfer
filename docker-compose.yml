@@ -3,21 +3,35 @@ version: "3"
 services:
   api-gateway:
     build:
-      context: ./api-gateway
+      context: ./dockerfiles/api-services.dockerfile
     ports:
       - "3001:3001"
+    env_file:
+      - ./api-gateway/.env
     mem_limit: 128m
     networks:
       - airport-transfer
     depends_on:
       - rabbitmq
 
-  rabbitmq:
-    image: rabbitmq:latest
+  partnership-client:
+    build:
+      context: ./dockerfiles/client.dockerfile
+    ports:
+      - "3000:80"
     mem_limit: 128m
+    env_file:
+      - ./partnership-client/.env
+    networks:
+      - airport-transfer
+
+  rabbitmq:
+    image: rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - airport-transfer
 
 networks:
   airport-transfer:
