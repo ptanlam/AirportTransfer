@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+    ports:
+      - "3001:3001"
+    mem_limit: 128m
+    networks:
+      - airport-transfer
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:latest
+    mem_limit: 128m
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+networks:
+  airport-transfer:
+    driver: bridge
