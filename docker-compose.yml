@@ -1,6 +1,19 @@
 version: "3"
 
 services:
+  partnership-client:
+    build:
+      context: ./partnership-client
+      dockerfile: client.Dockerfile
+    ports:
+      - "3000:80"
+    mem_limit: 128m
+    cpus: ".2"
+    env_file:
+      - ./partnership-client/.env
+    networks:
+      - airport-transfer
+
   api-gateway:
     build:
       context: ./api-gateway
@@ -9,21 +22,25 @@ services:
       - "3001:3001"
     env_file:
       - ./api-gateway/.env
+    restart: unless-stopped
     mem_limit: 128m
+    cpus: ".5"
     networks:
       - airport-transfer
     depends_on:
       - rabbitmq
 
-  partnership-client:
-    build:
-      context: ./partnership-client
-      dockerfile: client.Dockerfile
+  sqlserver_db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
-      - "3000:80"
-    mem_limit: 128m
-    env_file:
-      - ./partnership-client/.env
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Admin@123
+    volumes:
+      - ./db/data:/var/opt/mssql/data
+      - ./db/log:/var/opt/mssql/log
+      - ./db/secrets:/var/opt/mssql/secrets
     networks:
       - airport-transfer
 
