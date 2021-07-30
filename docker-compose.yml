@@ -42,7 +42,7 @@ services:
       - airport-transfer
     depends_on:
       - rabbitmq
-      - sqlserver_db
+      - mssql
 
   partner-service:
     build:
@@ -57,7 +57,7 @@ services:
       - airport-transfer
     depends_on:
       - rabbitmq
-      - sqlserver_db
+      - mssql
 
   bus-service:
     build:
@@ -72,9 +72,9 @@ services:
       - airport-transfer
     depends_on:
       - rabbitmq
-      - sqlserver_db
+      - mssql
 
-  sqlserver_db:
+  mssql:
     image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
       - "1433:1433"
@@ -82,9 +82,9 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Admin@123
     volumes:
-      - ./db/data:/var/opt/mssql/data
-      - ./db/log:/var/opt/mssql/log
-      - ./db/secrets:/var/opt/mssql/secrets
+      - ./database/data:/var/opt/mssql/data
+      - ./database/log:/var/opt/mssql/log
+      - ./database/secrets:/var/opt/mssql/secrets
     networks:
       - airport-transfer
 

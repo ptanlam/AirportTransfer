@@ -12,4 +12,4 @@ COPY package*.json ./
 RUN npm install
 COPY --from=builder /www/var/dist ./dist
 COPY . ./
-CMD ["node", "main.js"]
+CMD ["node", "dist/listener.js"]
