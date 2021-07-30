@@ -11,11 +11,13 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { Request } from "express";
 import { timeout } from "rxjs/operators";
 import { Public } from "src/common/decorators/public.decorator";
 import { Roles } from "src/common/decorators/role.decorator";
@@ -119,10 +121,11 @@ export class FlightsController {
   @Post()
   async postFlight(
     @Body() registerFlightDTO: RegisterFlightDTO,
-    @UploadedFile() photo: Express.Multer.File
+    @UploadedFile() photo: Express.Multer.File,
+    @Req() request: Request
   ) {
     try {
-      registerFlightDTO.photoUrl = photo.filename;
+      registerFlightDTO.photoUrl = `http://${request.headers.host}/${photo.filename}`;
       const flight = await this.client
         .send("register_flight", registerFlightDTO)
         .pipe(timeout(15000))
@@ -292,13 +295,14 @@ export class FlightsController {
   async patchFlight(
     @Param("vehicleId") vehicleId: string,
     @Body() editFlightDTO: EditFlightDTO,
-    @UploadedFile() photo: Express.Multer.File
+    @UploadedFile() photo: Express.Multer.File,
+    @Req() request: Request
   ) {
     try {
       const updatedInformation = new EditFlightDTO(
         editFlightDTO.name,
         editFlightDTO.guestQuantity,
-        photo.filename
+        `http://${request.headers.host}/${photo.filename}`
       );
       const flight = await this.client
         .send("update_flight", { ...updatedInformation, vehicleId })

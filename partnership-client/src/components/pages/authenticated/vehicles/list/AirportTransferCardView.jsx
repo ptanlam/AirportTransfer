@@ -17,13 +17,12 @@ import {
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import React, { useState } from "react";
 import RemoveIcon from "@material-ui/icons/Remove";
-import convertToCurrency from "../../../../../utils/convertToCurrency";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import vehicleActions from "../../../../../redux/actions/vehicleActions";
 import { toast } from "react-toastify";
-import { BASE_URL } from "../../../../../constants";
+import vehicleActions from "../../../../../redux/actions/vehicleActions";
+import convertToCurrency from "../../../../../utils/convertToCurrency";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -276,7 +275,7 @@ function AirportTransferCardView({
               <img
                 width="100%"
                 style={{ borderRadius: 10 }}
-                src={`${BASE_URL}/${vehicle.photoUrl}`}
+                src={vehicle.photoUrl}
                 alt={vehicle.name}
               />
             </Grid>

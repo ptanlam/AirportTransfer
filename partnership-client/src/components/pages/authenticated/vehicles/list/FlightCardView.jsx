@@ -1,6 +1,5 @@
 import { Button, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
 import React from "react";
-import { BASE_URL } from "../../../../../constants";
 
 const useStyles = makeStyles({
   paper: {
@@ -45,7 +44,7 @@ export default function FlightCardView({ vehicle, openVehicleEditDialog }) {
             <img
               width="100%"
               style={{ borderRadius: 10 }}
-              src={`${BASE_URL}/${vehicle.photoUrl}`}
+              src={vehicle.photoUrl}
               alt={vehicle.name}
             />
           </Grid>

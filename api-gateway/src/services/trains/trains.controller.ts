@@ -11,11 +11,13 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { Request } from "express";
 import { timeout } from "rxjs/operators";
 import { Public } from "src/common/decorators/public.decorator";
 import { Roles } from "src/common/decorators/role.decorator";
@@ -58,10 +60,11 @@ export class TrainsController {
   @UseInterceptors(FileInterceptor("photo", { storage }))
   async postTrain(
     @Body() registerTrainDTO: TrainDTO,
-    @UploadedFile() photo: Express.Multer.File
+    @UploadedFile() photo: Express.Multer.File,
+    @Req() request: Request
   ) {
     try {
-      registerTrainDTO.photoUrl = photo.filename;
+      registerTrainDTO.photoUrl = `http://${request.headers.host}/${photo.filename}`;
       const train = await this.client
         .send("post_train", registerTrainDTO)
         .pipe(timeout(15000))
@@ -317,13 +320,14 @@ export class TrainsController {
   async patchTrain(
     @Param("vehicleId") vehicleId: string,
     @Body() editTrainDTO: UpdateTrainDTO,
-    @UploadedFile() photo: Express.Multer.File
+    @UploadedFile() photo: Express.Multer.File,
+    @Req() request: Request
   ) {
     try {
       const updatedInformation = new UpdateTrainDTO(
         editTrainDTO.name,
         editTrainDTO.ticketPrice,
-        photo.filename,
+        `http://${request.headers.host}/${photo.filename}`,
         editTrainDTO.classId
       );
 

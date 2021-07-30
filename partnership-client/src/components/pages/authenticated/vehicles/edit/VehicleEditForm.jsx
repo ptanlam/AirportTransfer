@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { BASE_URL } from "../../../../../constants";
 import VerticalLabelAutocompleteInput from "../../../../commons/VerticalLabelAutocompleteInput";
 import VerticalPlaceInput from "../../../../commons/VerticalPlaceInput";
 
@@ -120,7 +119,7 @@ export default function VehicleEditForm({
                       src={
                         photoFile
                           ? URL.createObjectURL(photoFile)
-                          : `${BASE_URL}/${vehicle.photoUrl}`
+                          : vehicle.photoUrl
                       }
                       alt={vehicle.name}
                     />

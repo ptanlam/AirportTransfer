@@ -111,7 +111,7 @@ export default function CompanyProfile({
                         src={
                           logoFile
                             ? URL.createObjectURL(logoFile)
-                            : `${BASE_URL}/${partner.logoUrl}`
+                            : partner.logoUrl
                         }
                         alt={partner.name}
                       />

@@ -11,11 +11,13 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { Request } from "express";
 import { timeout } from "rxjs/operators";
 import { Public } from "src/common/decorators/public.decorator";
 import { Roles } from "src/common/decorators/role.decorator";
@@ -58,11 +60,12 @@ export class CarsController {
   @UseInterceptors(FileInterceptor("photo", { storage }))
   async postCar(
     @Body() carModelDTO: CarModelDTO,
-    @UploadedFile() photo: Express.Multer.File
+    @UploadedFile() photo: Express.Multer.File,
+    @Req() request: Request
   ) {
     try {
       const { details } = carModelDTO;
-      carModelDTO.photoUrl = photo.filename;
+      carModelDTO.photoUrl = `http://${request.headers.host}/${photo.filename}`;
       carModelDTO.details = JSON.parse(details);
       const car = await this.client
         .send("register_car_model_and_cars", carModelDTO)
@@ -306,14 +309,15 @@ export class CarsController {
   async updateCar(
     @Param("vehicleId") vehicleId: string,
     @Body() updateCarModelInformationDTO: UpdateCarModelInformationDTO,
-    @UploadedFile() photo: Express.Multer.File
+    @UploadedFile() photo: Express.Multer.File,
+    @Req() request: Request
   ) {
     try {
       const updatedInformation = new UpdateCarModelInformationDTO(
         updateCarModelInformationDTO.name,
         updateCarModelInformationDTO.luggagePayload,
         updateCarModelInformationDTO.guestQuantity,
-        photo.filename,
+        `http://${request.headers.host}/${photo.filename}`,
         updateCarModelInformationDTO.standardPricePerKm,
         updateCarModelInformationDTO.country,
         updateCarModelInformationDTO.city,

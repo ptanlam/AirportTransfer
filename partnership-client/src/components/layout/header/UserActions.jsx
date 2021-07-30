@@ -18,7 +18,6 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { BASE_URL } from "../../../constants";
 import accountActions from "../../../redux/actions/accountActions";
 import partnerActions from "../../../redux/actions/partnerActions";
 
@@ -83,7 +82,7 @@ function UserActions({
             <>
               <Grid item>
                 <IconButton onClick={handleOpenPopover}>
-                  <Avatar src={`${BASE_URL}/${logoUrl}`} />
+                  <Avatar src={logoUrl} />
                   <ExpandMore className={classes.itemText} />
                 </IconButton>
                 <Popover

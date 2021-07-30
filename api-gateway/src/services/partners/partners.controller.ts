@@ -108,7 +108,11 @@ export class PartnersController {
   ) {
     try {
       const presenterId = await this.createPresenter(createPartnerDTO);
-      await this.createPartner(createPartnerDTO, presenterId, logo.filename);
+      await this.createPartner(
+        createPartnerDTO,
+        presenterId,
+        `http://${request.headers.host}/${logo.filename}`
+      );
       const token = await this.authService.generateTokenForVerify(presenterId);
       // this.emailService.sendRegistrationMail(
       //   createPartnerDTO.email,
@@ -377,10 +381,11 @@ export class PartnersController {
   async changePartnerLogo(
     @Param("partnerId") partnerId: string,
     @Body() data: { oldLogoKey: string },
-    @UploadedFile() logo: Express.Multer.File
+    @UploadedFile() logo: Express.Multer.File,
+    @Req() request: Request
   ) {
     try {
-      const logoUrl = logo.filename;
+      const logoUrl = `http://${request.headers.host}/${logo.filename}`;
       const changes = await this.client
         .send("change_partner_logo", { logoUrl, partnerId })
         .pipe(timeout(15000))
