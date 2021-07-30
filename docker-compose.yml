@@ -30,6 +30,57 @@ services:
     depends_on:
       - rabbitmq
 
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: user-service.Dockerfile
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./user-service/.env
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: ".2"
+    networks:
+      - airport-transfer
+    depends_on:
+      - rabbitmq
+      - sqlserver_db
+
+  partner-service:
+    build:
+      context: ./partner-service
+      dockerfile: partner-service.Dockerfile
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./partner-service/.env
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: ".2"
+    networks:
+      - airport-transfer
+    depends_on:
+      - rabbitmq
+      - sqlserver_db
+
+  bus-service:
+    build:
+      context: ./bus-service
+      dockerfile: bus-service.Dockerfile
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./bus-service/.env
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: ".2"
+    networks:
+      - airport-transfer
+    depends_on:
+      - rabbitmq
+      - sqlserver_db
+
   sqlserver_db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
