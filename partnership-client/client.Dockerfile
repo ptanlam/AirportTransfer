@@ -1,9 +1,9 @@
 FROM node:14.17.3-alpine AS builder
 WORKDIR /www/var
-COPY partnership-client/package*.json ./
+COPY package*.json ./
 RUN npm install -g react-scripts 
 RUN npm install
-COPY partnership-client/ ./
+COPY . ./
 RUN npm run build
 
 FROM nginx:stable-alpine

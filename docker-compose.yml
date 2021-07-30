@@ -3,7 +3,7 @@ version: "3"
 services:
   api-gateway:
     build:
-      context: .
+      context: ./api-gateway
       dockerfile: api-gateway.Dockerfile
     ports:
       - "3001:3001"
@@ -17,7 +17,7 @@ services:
 
   partnership-client:
     build:
-      context: .
+      context: ./partnership-client
       dockerfile: client.Dockerfile
     ports:
       - "3000:80"
