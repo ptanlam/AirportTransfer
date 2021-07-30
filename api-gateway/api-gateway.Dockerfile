@@ -1,15 +1,12 @@
 FROM node:14.17.3-alpine AS builder
 WORKDIR /www/var
 COPY package*.json ./
-RUN npm install glob rimraf
-RUN npm install
+RUN npm ci
 COPY . ./
-RUN npm run build
+RUN npm run build && npm prune --production
 
 FROM node:14.17.3-alpine
 WORKDIR /www/var
-COPY package*.json ./
-RUN npm install
 COPY --from=builder /www/var/dist ./dist
-COPY . ./
+COPY --from=builder /www/var/node_modules ./node_modules
 CMD [ "node", "dist/main.js"]
