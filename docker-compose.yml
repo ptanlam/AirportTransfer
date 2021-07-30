@@ -34,13 +34,10 @@ services:
     build:
       context: ./user-service
       dockerfile: user-service.Dockerfile
-    ports:
-      - "3001:3001"
     env_file:
       - ./user-service/.env
     restart: unless-stopped
-    mem_limit: 64m
-    cpus: ".2"
+    mem_limit: 128m
     networks:
       - airport-transfer
     depends_on:
@@ -51,8 +48,6 @@ services:
     build:
       context: ./partner-service
       dockerfile: partner-service.Dockerfile
-    ports:
-      - "3001:3001"
     env_file:
       - ./partner-service/.env
     restart: unless-stopped
@@ -68,8 +63,6 @@ services:
     build:
       context: ./bus-service
       dockerfile: bus-service.Dockerfile
-    ports:
-      - "3001:3001"
     env_file:
       - ./bus-service/.env
     restart: unless-stopped
