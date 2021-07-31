@@ -114,13 +114,13 @@ export class PartnersController {
         `http://${request.headers.host}/${logo.filename}`
       );
       const token = await this.authService.generateTokenForVerify(presenterId);
-      // this.emailService.sendRegistrationMail(
-      //   createPartnerDTO.email,
-      //   createPartnerDTO.presenterFirstName,
-      //   createPartnerDTO.presenterLastName,
-      //   request.headers.host,
-      //   token
-      // );
+      this.emailService.sendRegistrationMail(
+        createPartnerDTO.email,
+        createPartnerDTO.presenterFirstName,
+        createPartnerDTO.presenterLastName,
+        request.headers.host,
+        token
+      );
       return {
         message:
           "Register partner successfully! " +
