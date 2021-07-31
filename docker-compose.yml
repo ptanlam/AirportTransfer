@@ -102,6 +102,51 @@ services:
       - rabbitmq
       - mssql
 
+  car-service:
+    build:
+      context: ./car-service
+      dockerfile: car-service.Dockerfile
+    env_file:
+      - ./car-service/.env
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: ".2"
+    networks:
+      - airport-transfer
+    depends_on:
+      - rabbitmq
+      - mssql
+
+  train-service:
+    build:
+      context: ./train-service
+      dockerfile: train-service.Dockerfile
+    env_file:
+      - ./train-service/.env
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: ".2"
+    networks:
+      - airport-transfer
+    depends_on:
+      - rabbitmq
+      - mssql
+
+  flight-service:
+    build:
+      context: ./flight-service
+      dockerfile: flight-service.Dockerfile
+    env_file:
+      - ./flight-service/.env
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: ".2"
+    networks:
+      - airport-transfer
+    depends_on:
+      - rabbitmq
+      - mssql
+
   booking-service:
     build:
       context: ./booking-service
