@@ -22,9 +22,11 @@ services:
       - "3001:3001"
     env_file:
       - ./api-gateway/.env
+    volumes:
+      - ./uploads:/www/var/uploads
     restart: unless-stopped
     mem_limit: 128m
-    cpus: ".5"
+    cpus: ".2"
     networks:
       - airport-transfer
     depends_on:
@@ -75,7 +77,9 @@ services:
       - mssql
 
   mssql:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    build:
+      context: ./mssql
+      dockerfile: mssql.Dockerfile
     ports:
       - "1433:1433"
     environment:
