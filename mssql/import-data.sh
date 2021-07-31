@@ -9,7 +9,7 @@ do
     if [ $? -eq 0 ]
     then
         echo "$filename completed"
-        break
+        continue
     else
         echo "not ready yet..."
         sleep 1

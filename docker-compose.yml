@@ -14,6 +14,32 @@ services:
     networks:
       - airport-transfer
 
+  guest-client:
+    build:
+      context: ./guest-client
+      dockerfile: client.Dockerfile
+    ports:
+      - "3002:80"
+    mem_limit: 128m
+    cpus: ".2"
+    env_file:
+      - ./guest-client/.env
+    networks:
+      - airport-transfer
+
+  administration-client:
+    build:
+      context: ./administration-client
+      dockerfile: client.Dockerfile
+    ports:
+      - "3002:80"
+    mem_limit: 128m
+    cpus: ".2"
+    env_file:
+      - ./administration-client/.env
+    networks:
+      - airport-transfer
+
   api-gateway:
     build:
       context: ./api-gateway
@@ -23,7 +49,7 @@ services:
     env_file:
       - ./api-gateway/.env
     volumes:
-      - ./uploads:/www/var/uploads
+      - ./api-gateway/uploads:/www/var/uploads
     restart: unless-stopped
     mem_limit: 128m
     cpus: ".2"
@@ -67,6 +93,21 @@ services:
       dockerfile: bus-service.Dockerfile
     env_file:
       - ./bus-service/.env
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: ".2"
+    networks:
+      - airport-transfer
+    depends_on:
+      - rabbitmq
+      - mssql
+
+  booking-service:
+    build:
+      context: ./booking-service
+      dockerfile: booking-service.Dockerfile
+    env_file:
+      - ./booking-service/.env
     restart: unless-stopped
     mem_limit: 64m
     cpus: ".2"
