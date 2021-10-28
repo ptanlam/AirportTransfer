@@ -1,60 +1,29 @@
-version: "3"
+version: '3.9'
 
 services:
-  partnership-client:
-    build:
-      context: ./partnership-client
-      dockerfile: client.Dockerfile
-    ports:
-      - "3000:80"
-    mem_limit: 128m
-    cpus: ".2"
-    env_file:
-      - ./partnership-client/.env
-    networks:
-      - airport-transfer
-
-  guest-client:
-    build:
-      context: ./guest-client
-      dockerfile: client.Dockerfile
-    ports:
-      - "3002:80"
-    mem_limit: 128m
-    cpus: ".2"
-    env_file:
-      - ./guest-client/.env
-    networks:
-      - airport-transfer
-
-  administration-client:
-    build:
-      context: ./administration-client
-      dockerfile: client.Dockerfile
-    ports:
-      - "3002:80"
-    mem_limit: 128m
-    cpus: ".2"
-    env_file:
-      - ./administration-client/.env
-    networks:
-      - airport-transfer
-
   api-gateway:
     build:
       context: ./api-gateway
       dockerfile: api-gateway.Dockerfile
-    ports:
-      - "3001:3001"
-    env_file:
-      - ./api-gateway/.env
+    environment:
+      - MQ_URL=amqp://guest:guest@host.docker.internal/
+      - ORIGINS=http://host.docker.internal:3000
+      - EMAIL_SERVICE=gmail
+      - EMAIL_USERNAME=
+      - EMAIL_PASSWORD=
+      - AWS_ACCESS_ID=
+      - AWS_SECRET_KEY=
+      - AWS_REGION=
+      - JWT_SECRET=secret
+      - EXPIRY=1h
+      - ISSUER=traveloka-clone
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: 0.1
     volumes:
       - ./api-gateway/uploads:/www/var/uploads
-    restart: unless-stopped
-    mem_limit: 128m
-    cpus: ".2"
-    networks:
-      - airport-transfer
+    ports:
+      - 8000:3001
     depends_on:
       - rabbitmq
 
@@ -62,25 +31,16 @@ services:
     build:
       context: ./user-service
       dockerfile: user-service.Dockerfile
-    env_file:
-      - ./user-service/.env
-    restart: unless-stopped
-    mem_limit: 128m
-    networks:
-      - airport-transfer
-    depends_on:
-      - rabbitmq
-      - mssql
-
-  partner-service:
-    build:
-      context: ./partner-service
-      dockerfile: partner-service.Dockerfile
-    env_file:
-      - ./partner-service/.env
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1433
+      - DB_USERNAME=sa
+      - DB_PASSWORD=Admin@123
+      - DB_NAME=User_Service_DB
+      - MQ_URL=amqp://guest:guest@host.docker.internal/
     restart: unless-stopped
     mem_limit: 64m
-    cpus: ".2"
+    cpus: 0.1
     networks:
       - airport-transfer
     depends_on:
@@ -91,11 +51,16 @@ services:
     build:
       context: ./bus-service
       dockerfile: bus-service.Dockerfile
-    env_file:
-      - ./bus-service/.env
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1433
+      - DB_USERNAME=sa
+      - DB_PASSWORD=Admin@123
+      - DB_NAME=Bus_Service_DB
+      - MQ_URL=amqp://guest:guest@host.docker.internal/
     restart: unless-stopped
     mem_limit: 64m
-    cpus: ".2"
+    cpus: 0.1
     networks:
       - airport-transfer
     depends_on:
@@ -106,11 +71,16 @@ services:
     build:
       context: ./car-service
       dockerfile: car-service.Dockerfile
-    env_file:
-      - ./car-service/.env
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1433
+      - DB_USERNAME=sa
+      - DB_PASSWORD=Admin@123
+      - DB_NAME=Car_Service_DB
+      - MQ_URL=amqp://guest:guest@host.docker.internal/
     restart: unless-stopped
     mem_limit: 64m
-    cpus: ".2"
+    cpus: 0.1
     networks:
       - airport-transfer
     depends_on:
@@ -121,11 +91,16 @@ services:
     build:
       context: ./train-service
       dockerfile: train-service.Dockerfile
-    env_file:
-      - ./train-service/.env
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1433
+      - DB_USERNAME=sa
+      - DB_PASSWORD=Admin@123
+      - DB_NAME=Train_Service_DB
+      - MQ_URL=amqp://guest:guest@host.docker.internal/
     restart: unless-stopped
     mem_limit: 64m
-    cpus: ".2"
+    cpus: 0.1
     networks:
       - airport-transfer
     depends_on:
@@ -136,11 +111,16 @@ services:
     build:
       context: ./flight-service
       dockerfile: flight-service.Dockerfile
-    env_file:
-      - ./flight-service/.env
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1433
+      - DB_USERNAME=sa
+      - DB_PASSWORD=Admin@123
+      - DB_NAME=Flight_Service_DB
+      - MQ_URL=amqp://guest:guest@host.docker.internal/
     restart: unless-stopped
     mem_limit: 64m
-    cpus: ".2"
+    cpus: 0.1
     networks:
       - airport-transfer
     depends_on:
@@ -151,38 +131,89 @@ services:
     build:
       context: ./booking-service
       dockerfile: booking-service.Dockerfile
-    env_file:
-      - ./booking-service/.env
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1433
+      - DB_USERNAME=sa
+      - DB_PASSWORD=Admin@123
+      - DB_NAME=Booking_Service_DB
+      - MQ_URL=amqp://guest:guest@host.docker.internal/
     restart: unless-stopped
     mem_limit: 64m
-    cpus: ".2"
+    cpus: 0.1
     networks:
       - airport-transfer
     depends_on:
       - rabbitmq
       - mssql
 
+  partnership-client:
+    build:
+      context: ./partnership-client
+      dockerfile: client.Dockerfile
+    environment:
+      - REACT_APP_BASE_API_URL=http://host.docker.internal:3001
+      - REACT_APP_VOUCHER_API_URL=
+    mem_limit: 64m
+    cpus: 0.1
+    ports:
+      - 3000:80
+    networks:
+      - airport-transfer
+
+  guest-client:
+    build:
+      context: ./guest-client
+      dockerfile: client.Dockerfile
+    environment:
+      - REACT_APP_BASE_API_URL=http://host.docker.internal:8000
+      - REACT_APP_VOUCHER_API_URL=
+      - REACT_APP_PROFILE_API_URL=
+    ports:
+      - 3001:80
+    mem_limit: 64m
+    cpus: 0.1
+    networks:
+      - airport-transfer
+
+  administration-client:
+    build:
+      context: ./administration-client
+      dockerfile: client.Dockerfile
+    ports:
+      - 3002:80
+    mem_limit: 64m
+    cpus: 0.1
+    environment:
+      - REACT_APP_BASE_API_URL=http://host.docker.internal:3001
+    networks:
+      - airport-transfer
+
   mssql:
     build:
       context: ./mssql
       dockerfile: mssql.Dockerfile
-    ports:
-      - "1433:1433"
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Admin@123
+    mem_limit: 2.2Gb
+    cpus: 0.2
     volumes:
       - ./database/data:/var/opt/mssql/data
       - ./database/log:/var/opt/mssql/log
       - ./database/secrets:/var/opt/mssql/secrets
+    ports:
+      - 1433:1433
     networks:
       - airport-transfer
 
   rabbitmq:
     image: rabbitmq:3-management
+    mem_limit: 256m
+    cpus: 0.1
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - 5672:5672
+      - 15672:15672
     networks:
       - airport-transfer
 

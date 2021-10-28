@@ -17,7 +17,7 @@ async function bootstrap() {
     region: process.env.AWS_REGION,
   });
   app.enableCors({
-    origin: "http://localhost:3000",
+    origin: process.env.ORIGINS.split(','),
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
     credentials: true,
