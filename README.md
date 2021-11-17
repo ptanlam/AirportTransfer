@@ -1,8 +1,6 @@
-# Junior project
+# Airport Transfer 🚃🚗✈️🚄
 
-## Airport Transfer (Microservices Architecture)
-
-In order to run this app, you have to have docker installed on your machine.
+In order to run this app, we assume that you have already got Docker installed on your machine.
 
 Instruction:
 
