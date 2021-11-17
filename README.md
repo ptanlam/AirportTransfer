@@ -12,3 +12,7 @@ Instruction:
     1. [localhost:3000](http://localhost:3000) if you want to manage your vehicles, policies and schedule
     2. [localhost:3001](http://localhost:3001) for browsing and booking vehicles
     3. [localhost:3002](http://localhost:3002) is designed for administration works.
+
+## Microservices Architecture with an API Gateway and using message queue (RabbitMQ) for service communication
+
+![alt text](../airport-transfer/assets/Architecture.png)
