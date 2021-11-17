@@ -68,7 +68,7 @@ function App({
       ({ activatedPartnerId, message }) => {
         if (activatedPartnerId !== partnerId) return;
         setNotificationDialog({ open: true, content: message });
-      },
+      }
     );
   }, [partnerId]);
 
@@ -154,61 +154,61 @@ function App({
           <Header />
 
           <Switch>
-            <Route path='/login' component={LoginFormManagement} />
+            <Route path="/login" component={LoginFormManagement} />
             <Route
-              path='/forget-password'
+              path="/forget-password"
               component={ForgetPasswordManagement}
             />
             <Route
-              path='/resend-email-verification'
+              path="/resend-email-verification"
               component={ResendVerificationEmailManagement}
             />
 
             {/* Unauthenticated */}
-            <Route exact path='/'>
+            <Route exact path="/">
               <Home />
             </Route>
             <Route
-              path='/registration'
+              path="/registration"
               component={RegistrationFormManagement}
             />
-            <Route path='/airport-transfer' component={AirportTransferHome} />
-            <Route path='/flights' component={FlightHome} />
+            <Route path="/airport-transfer" component={AirportTransferHome} />
+            <Route path="/flights" component={FlightHome} />
 
             {/* Authenticated */}
-            <ActivePartnerRoute path='/company'>
+            <ActivePartnerRoute path="/company">
               <CompanyProfileManagement />
             </ActivePartnerRoute>
-            <ActivePartnerRoute path='/vehicles'>
+            <ActivePartnerRoute path="/vehicles">
               <VehiclesManagement />
             </ActivePartnerRoute>
-            <ActivePartnerRoute path='/schedules'>
+            <ActivePartnerRoute path="/schedules">
               {transportType === 'cars' ? (
                 <CSSchedulesManagement />
               ) : (
                 <BTSchedulesManagement />
               )}
             </ActivePartnerRoute>
-            <ActivePartnerRoute path='/classes'>
+            <ActivePartnerRoute path="/classes">
               <ClassesManagement />
             </ActivePartnerRoute>
-            <ActivePartnerRoute path='/policies'>
+            <ActivePartnerRoute path="/policies">
               <PoliciesManagement />
             </ActivePartnerRoute>
-            <ActivePartnerRoute path='/vouchers'>
+            <ActivePartnerRoute path="/vouchers">
               <VouchersManagement />
             </ActivePartnerRoute>
-            <ActivePartnerRoute path='/tickets'>
+            <ActivePartnerRoute path="/tickets">
               <FSchedulesManagement />
             </ActivePartnerRoute>
-            <ProtectedRoute path='/account'>
+            <ProtectedRoute path="/account">
               <AccountManagement />
             </ProtectedRoute>
-            <ActivePartnerRoute path='/reports'>
+            <ActivePartnerRoute path="/reports">
               <ReportsManagement />
             </ActivePartnerRoute>
 
-            <Route path='*' exact component={NotFound} />
+            <Route path="*" exact component={NotFound} />
           </Switch>
 
           <Dialog open={notificationDialog.open}>
@@ -218,12 +218,13 @@ function App({
             </DialogContent>
             <DialogActions>
               <Button
-                variant='contained'
-                color='primary'
+                variant="contained"
+                color="primary"
                 onClick={() => {
                   setNotificationDialog({ open: false, content: '' });
                   activatePartner();
-                }}>
+                }}
+              >
                 Confirm
               </Button>
             </DialogActions>
@@ -232,7 +233,7 @@ function App({
           <ToastContainer
             hideProgressBar
             autoClose={3000}
-            position='bottom-center'
+            position="bottom-center"
           />
         </>
       )}
@@ -259,9 +260,9 @@ const mapDispatchToProps = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(
   scriptLoader([
     `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`,
-  ])(App),
+  ])(App)
 );

@@ -16,12 +16,7 @@ async function bootstrap() {
     secretAccessKey: process.env.AWS_SECRET_KEY,
     region: process.env.AWS_REGION,
   });
-  app.enableCors({
-    origin: process.env.ORIGINS.split(','),
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
-    credentials: true,
-  });
+  app.enableCors();
   await app.listen(3001);
 }
 bootstrap();

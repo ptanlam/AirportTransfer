@@ -151,9 +151,9 @@ services:
     build:
       context: ./partnership-client
       dockerfile: client.Dockerfile
-    environment:
-      - REACT_APP_BASE_API_URL=http://host.docker.internal:8000
-      - REACT_APP_VOUCHER_API_URL=
+      args:
+        - REACT_APP_BASE_API_URL=http://host.docker.internal:8000/api
+        - REACT_APP_VOUCHER_API_URL=
     mem_limit: 64m
     cpus: 0.1
     ports:
@@ -165,10 +165,10 @@ services:
     build:
       context: ./guest-client
       dockerfile: client.Dockerfile
-    environment:
-      - REACT_APP_BASE_API_URL=http://host.docker.internal:8000
-      - REACT_APP_VOUCHER_API_URL=
-      - REACT_APP_PROFILE_API_URL=
+      args:
+        - REACT_APP_BASE_API_URL=http://host.docker.internal:8000/api
+        - REACT_APP_VOUCHER_API_URL=
+        - REACT_APP_PROFILE_API_URL=
     ports:
       - 3001:80
     mem_limit: 64m
@@ -180,12 +180,12 @@ services:
     build:
       context: ./administration-client
       dockerfile: client.Dockerfile
+      args:
+        - REACT_APP_BASE_API_URL=http://host.docker.internal:8000/api
     ports:
       - 3002:80
     mem_limit: 64m
     cpus: 0.1
-    environment:
-      - REACT_APP_BASE_API_URL=http://host.docker.internal:8000
     networks:
       - airport-transfer
 
@@ -193,6 +193,7 @@ services:
     build:
       context: ./mssql
       dockerfile: mssql.Dockerfile
+    user: root
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Admin@123

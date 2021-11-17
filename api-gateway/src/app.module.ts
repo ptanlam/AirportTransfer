@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { APP_GUARD } from "@nestjs/core";
-import { ServeStaticModule } from "@nestjs/serve-static";
-import { join } from "path";
+import { AppGateway } from "./app.gateway";
 import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { RolesGuard } from "./auth/guards/role.guard";
@@ -15,7 +14,6 @@ import { TrainsModule } from "./services/trains/trains.module";
 import { UsersModule } from "./services/users/users.module";
 import { EmailModule } from "./utils/email/email.module";
 import { FilesService } from "./utils/files/files.service";
-import { AppGateway } from "./app.gateway";
 
 @Module({
   imports: [
@@ -29,9 +27,6 @@ import { AppGateway } from "./app.gateway";
     CarsModule,
     BookingModule,
     TrainsModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "uploads"),
-    }),
   ],
   providers: [
     FilesService,

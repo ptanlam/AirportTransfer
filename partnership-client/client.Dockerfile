@@ -4,6 +4,13 @@ COPY package*.json ./
 RUN npm install -g react-scripts 
 RUN npm install
 COPY . ./
+
+ARG REACT_APP_BASE_API_URL
+ARG REACT_APP_VOUCHER_API_URL
+
+ENV REACT_APP_BASE_API_URL=$REACT_APP_BASE_API_URL
+ARG REACT_APP_VOUCHER_API_URL=$REACT_APP_VOUCHER_API_URL
+
 RUN npm run build
 
 FROM nginx:stable-alpine
