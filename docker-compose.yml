@@ -152,7 +152,7 @@ services:
       context: ./partnership-client
       dockerfile: client.Dockerfile
     environment:
-      - REACT_APP_BASE_API_URL=http://host.docker.internal:3001
+      - REACT_APP_BASE_API_URL=http://host.docker.internal:8000
       - REACT_APP_VOUCHER_API_URL=
     mem_limit: 64m
     cpus: 0.1
@@ -185,7 +185,7 @@ services:
     mem_limit: 64m
     cpus: 0.1
     environment:
-      - REACT_APP_BASE_API_URL=http://host.docker.internal:3001
+      - REACT_APP_BASE_API_URL=http://host.docker.internal:8000
     networks:
       - airport-transfer
 
