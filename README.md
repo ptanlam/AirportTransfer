@@ -15,4 +15,4 @@ Instruction:
 
 ## Microservices Architecture with an API Gateway and using message queue (RabbitMQ) for service communication
 
-![alt text](../airport-transfer/assets/Architecture.png)
+![alt text](https://github.com/ptanlam/airport-transfer/blob/master/assets/Architecture.png)
