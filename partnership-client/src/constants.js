@@ -11,6 +11,9 @@ import AirlineSeatReclineNormalIcon from '@material-ui/icons/AirlineSeatReclineN
 import ClassIcon from '@material-ui/icons/Class';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import PolicyIcon from '@material-ui/icons/Policy';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 export const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 export const VOUCHER_API_URL = process.env.REACT_APP_VOUCHER_API_URL;

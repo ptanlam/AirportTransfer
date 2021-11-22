@@ -127,6 +127,26 @@ services:
       - rabbitmq
       - mssql
 
+  partner-service:
+    build:
+      context: ./partner-service
+      dockerfile: partner-service.Dockerfile
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1433
+      - DB_USERNAME=sa
+      - DB_PASSWORD=Admin@123
+      - DB_NAME=Partner_Service_DB
+      - MQ_URL=amqp://guest:guest@host.docker.internal/
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: 0.1
+    networks:
+      - airport-transfer
+    depends_on:
+      - mssql
+      - rabbitmq
+
   booking-service:
     build:
       context: ./booking-service
