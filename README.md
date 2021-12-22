@@ -4,7 +4,7 @@ In order to run this app, we assume that you have already got Docker installed o
 
 Instruction:
 
-1. Navigate to directory hold this repo. For example: `cd airport-transfer`.
+1. Navigate to this repository. For example: `cd airport-transfer`.
 
 2. Run `docker compose up -d` and wait until everything is running.
 
