@@ -2,233 +2,53 @@ version: '3.9'
 
 services:
   api-gateway:
-    build:
-      context: ./api-gateway
-    environment:
-      - MQ_URL=amqp://guest:guest@rabbitmq
-      - EMAIL_SERVICE=gmail
-      - EMAIL_USERNAME=${EMAIL_USERNAME}
-      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - AWS_ACCESS_ID=${AWS_ACCESS_ID}
-      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
-      - AWS_REGION=${AWS_REGION}
-      - JWT_SECRET=secret
-      - EXPIRY=1h
-      - ISSUER=traveloka-clone
-    restart: unless-stopped
-    mem_limit: 64m
-    cpus: 0.1
-    volumes:
-      - uploads:/www/var/uploads
-    ports:
-      - 8000:3001
-    depends_on:
-      - rabbitmq
+    build: ./api-gateway
+    container_name: api-gateway
 
   user-service:
-    build:
-      context: ./user-service
-    environment:
-      - DB_HOST=mssql
-      - DB_PORT=1433
-      - DB_USERNAME=sa
-      - DB_PASSWORD=Admin@123
-      - DB_NAME=User_Service_DB
-      - MQ_URL=amqp://guest:guest@rabbitmq
-    restart: unless-stopped
-    mem_limit: 64m
-    cpus: 0.1
-    networks:
-      - airport-transfer
-    depends_on:
-      - rabbitmq
-      - mssql
+    build: ./services/user-service
+    container_name: user-service
 
   bus-service:
-    build:
-      context: ./bus-service
-    environment:
-      - DB_HOST=mssql
-      - DB_PORT=1433
-      - DB_USERNAME=sa
-      - DB_PASSWORD=Admin@123
-      - DB_NAME=Bus_Service_DB
-      - MQ_URL=amqp://guest:guest@rabbitmq
-    restart: unless-stopped
-    mem_limit: 64m
-    cpus: 0.1
-    networks:
-      - airport-transfer
-    depends_on:
-      - rabbitmq
-      - mssql
+    build: ./services/bus-service
+    container_name: bus-service
 
   car-service:
-    build:
-      context: ./car-service
-    environment:
-      - DB_HOST=mssql
-      - DB_PORT=1433
-      - DB_USERNAME=sa
-      - DB_PASSWORD=Admin@123
-      - DB_NAME=Car_Service_DB
-      - MQ_URL=amqp://guest:guest@rabbitmq
-    restart: unless-stopped
-    mem_limit: 64m
-    cpus: 0.1
-    networks:
-      - airport-transfer
-    depends_on:
-      - rabbitmq
-      - mssql
+    build: ./services/car-service
+    container_name: car-service
 
   train-service:
-    build:
-      context: ./train-service
-    environment:
-      - DB_HOST=mssql
-      - DB_PORT=1433
-      - DB_USERNAME=sa
-      - DB_PASSWORD=Admin@123
-      - DB_NAME=Train_Service_DB
-      - MQ_URL=amqp://guest:guest@rabbitmq
-    restart: unless-stopped
-    mem_limit: 64m
-    cpus: 0.1
-    networks:
-      - airport-transfer
-    depends_on:
-      - rabbitmq
-      - mssql
+    build: ./services/train-service
+    container_name: train-service
 
   flight-service:
-    build:
-      context: ./flight-service
-    environment:
-      - DB_HOST=mssql
-      - DB_PORT=1433
-      - DB_USERNAME=sa
-      - DB_PASSWORD=Admin@123
-      - DB_NAME=Flight_Service_DB
-      - MQ_URL=amqp://guest:guest@rabbitmq
-    restart: unless-stopped
-    mem_limit: 64m
-    cpus: 0.1
-    networks:
-      - airport-transfer
-    depends_on:
-      - rabbitmq
-      - mssql
+    build: ./services/flight-service
+    container_name: flight-service
 
   partner-service:
-    build:
-      context: ./partner-service
-    environment:
-      - DB_HOST=mssql
-      - DB_PORT=1433
-      - DB_USERNAME=sa
-      - DB_PASSWORD=Admin@123
-      - DB_NAME=Partner_Service_DB
-      - MQ_URL=amqp://guest:guest@rabbitmq
-    restart: unless-stopped
-    mem_limit: 64m
-    cpus: 0.1
-    networks:
-      - airport-transfer
-    depends_on:
-      - mssql
-      - rabbitmq
+    build: ./services/partner-service
+    container_name: partner-service
 
   booking-service:
-    build:
-      context: ./booking-service
-    environment:
-      - DB_HOST=mssql
-      - DB_PORT=1433
-      - DB_USERNAME=sa
-      - DB_PASSWORD=Admin@123
-      - DB_NAME=Booking_Service_DB
-      - MQ_URL=amqp://guest:guest@rabbitmq
-    restart: unless-stopped
-    mem_limit: 64m
-    cpus: 0.1
-    networks:
-      - airport-transfer
-    depends_on:
-      - rabbitmq
-      - mssql
+    build: ./services/booking-service
+    container_name: booking-service
 
   partnership-client:
-    build:
-      context: ./partnership-client
-      args:
-        - REACT_APP_BASE_API_URL=http://api-gateway:8000/api
-        - REACT_APP_VOUCHER_API_URL=
-    mem_limit: 64m
-    cpus: 0.1
-    ports:
-      - 3000:80
-    networks:
-      - airport-transfer
+    build: ./clients/partnership-client
+    container_name: partnership-client
 
   guest-client:
-    build:
-      context: ./guest-client
-      args:
-        - REACT_APP_BASE_API_URL=http://api-gateway:8000/api
-        - REACT_APP_VOUCHER_API_URL=
-        - REACT_APP_PROFILE_API_URL=
-    ports:
-      - 3001:80
-    mem_limit: 64m
-    cpus: 0.1
-    networks:
-      - airport-transfer
+    build: ./clients/guest-client
+    container_name: guest-client
 
   administration-client:
-    build:
-      context: ./administration-client
-      args:
-        - REACT_APP_BASE_API_URL=http://api-gateway:8000/api
-    ports:
-      - 3002:80
-    mem_limit: 64m
-    cpus: 0.1
-    networks:
-      - airport-transfer
+    build: ./clients/administration-client
+    container_name: administration-client
 
   mssql:
-    build:
-      context: ./mssql
-    user: root
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Admin@123
-    mem_limit: 2.2Gb
-    cpus: 0.2
-    volumes:
-      - mssql-data:/var/opt/mssql/data
-    ports:
-      - 1433:1433
-    networks:
-      - airport-transfer
+    build: ./mssql
+    container_name: mssql
 
   rabbitmq:
     image: rabbitmq:3.9.11-management-alpine
-    mem_limit: 256m
-    cpus: 0.1
-    ports:
-      - 5672:5672
-      - 15672:15672
-    networks:
-      - airport-transfer
-
-networks:
-  airport-transfer:
-    driver: bridge
-
-volumes:
-  uploads:
-    driver: local
-  mssql-data:
-    driver: local
+    container_name: rabbitmq
