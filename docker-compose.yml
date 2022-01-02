@@ -4,16 +4,14 @@ services:
   api-gateway:
     build:
       context: ./api-gateway
-      dockerfile: api-gateway.Dockerfile
     environment:
-      - MQ_URL=amqp://guest:guest@host.docker.internal/
-      - ORIGINS=http://host.docker.internal:3000
+      - MQ_URL=amqp://guest:guest@rabbitmq
       - EMAIL_SERVICE=gmail
-      - EMAIL_USERNAME=
-      - EMAIL_PASSWORD=
-      - AWS_ACCESS_ID=
-      - AWS_SECRET_KEY=
-      - AWS_REGION=
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - AWS_ACCESS_ID=${AWS_ACCESS_ID}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - AWS_REGION=${AWS_REGION}
       - JWT_SECRET=secret
       - EXPIRY=1h
       - ISSUER=traveloka-clone
@@ -21,7 +19,7 @@ services:
     mem_limit: 64m
     cpus: 0.1
     volumes:
-      - ./api-gateway/uploads:/www/var/uploads
+      - uploads:/www/var/uploads
     ports:
       - 8000:3001
     depends_on:
@@ -30,14 +28,13 @@ services:
   user-service:
     build:
       context: ./user-service
-      dockerfile: user-service.Dockerfile
     environment:
-      - DB_HOST=host.docker.internal
+      - DB_HOST=mssql
       - DB_PORT=1433
       - DB_USERNAME=sa
       - DB_PASSWORD=Admin@123
       - DB_NAME=User_Service_DB
-      - MQ_URL=amqp://guest:guest@host.docker.internal/
+      - MQ_URL=amqp://guest:guest@rabbitmq
     restart: unless-stopped
     mem_limit: 64m
     cpus: 0.1
@@ -50,14 +47,13 @@ services:
   bus-service:
     build:
       context: ./bus-service
-      dockerfile: bus-service.Dockerfile
     environment:
-      - DB_HOST=host.docker.internal
+      - DB_HOST=mssql
       - DB_PORT=1433
       - DB_USERNAME=sa
       - DB_PASSWORD=Admin@123
       - DB_NAME=Bus_Service_DB
-      - MQ_URL=amqp://guest:guest@host.docker.internal/
+      - MQ_URL=amqp://guest:guest@rabbitmq
     restart: unless-stopped
     mem_limit: 64m
     cpus: 0.1
@@ -70,14 +66,13 @@ services:
   car-service:
     build:
       context: ./car-service
-      dockerfile: car-service.Dockerfile
     environment:
-      - DB_HOST=host.docker.internal
+      - DB_HOST=mssql
       - DB_PORT=1433
       - DB_USERNAME=sa
       - DB_PASSWORD=Admin@123
       - DB_NAME=Car_Service_DB
-      - MQ_URL=amqp://guest:guest@host.docker.internal/
+      - MQ_URL=amqp://guest:guest@rabbitmq
     restart: unless-stopped
     mem_limit: 64m
     cpus: 0.1
@@ -90,14 +85,13 @@ services:
   train-service:
     build:
       context: ./train-service
-      dockerfile: train-service.Dockerfile
     environment:
-      - DB_HOST=host.docker.internal
+      - DB_HOST=mssql
       - DB_PORT=1433
       - DB_USERNAME=sa
       - DB_PASSWORD=Admin@123
       - DB_NAME=Train_Service_DB
-      - MQ_URL=amqp://guest:guest@host.docker.internal/
+      - MQ_URL=amqp://guest:guest@rabbitmq
     restart: unless-stopped
     mem_limit: 64m
     cpus: 0.1
@@ -110,14 +104,13 @@ services:
   flight-service:
     build:
       context: ./flight-service
-      dockerfile: flight-service.Dockerfile
     environment:
-      - DB_HOST=host.docker.internal
+      - DB_HOST=mssql
       - DB_PORT=1433
       - DB_USERNAME=sa
       - DB_PASSWORD=Admin@123
       - DB_NAME=Flight_Service_DB
-      - MQ_URL=amqp://guest:guest@host.docker.internal/
+      - MQ_URL=amqp://guest:guest@rabbitmq
     restart: unless-stopped
     mem_limit: 64m
     cpus: 0.1
@@ -130,14 +123,13 @@ services:
   partner-service:
     build:
       context: ./partner-service
-      dockerfile: partner-service.Dockerfile
     environment:
-      - DB_HOST=host.docker.internal
+      - DB_HOST=mssql
       - DB_PORT=1433
       - DB_USERNAME=sa
       - DB_PASSWORD=Admin@123
       - DB_NAME=Partner_Service_DB
-      - MQ_URL=amqp://guest:guest@host.docker.internal/
+      - MQ_URL=amqp://guest:guest@rabbitmq
     restart: unless-stopped
     mem_limit: 64m
     cpus: 0.1
@@ -150,14 +142,13 @@ services:
   booking-service:
     build:
       context: ./booking-service
-      dockerfile: booking-service.Dockerfile
     environment:
-      - DB_HOST=host.docker.internal
+      - DB_HOST=mssql
       - DB_PORT=1433
       - DB_USERNAME=sa
       - DB_PASSWORD=Admin@123
       - DB_NAME=Booking_Service_DB
-      - MQ_URL=amqp://guest:guest@host.docker.internal/
+      - MQ_URL=amqp://guest:guest@rabbitmq
     restart: unless-stopped
     mem_limit: 64m
     cpus: 0.1
@@ -170,9 +161,8 @@ services:
   partnership-client:
     build:
       context: ./partnership-client
-      dockerfile: client.Dockerfile
       args:
-        - REACT_APP_BASE_API_URL=http://host.docker.internal:8000/api
+        - REACT_APP_BASE_API_URL=http://api-gateway:8000/api
         - REACT_APP_VOUCHER_API_URL=
     mem_limit: 64m
     cpus: 0.1
@@ -184,9 +174,8 @@ services:
   guest-client:
     build:
       context: ./guest-client
-      dockerfile: client.Dockerfile
       args:
-        - REACT_APP_BASE_API_URL=http://host.docker.internal:8000/api
+        - REACT_APP_BASE_API_URL=http://api-gateway:8000/api
         - REACT_APP_VOUCHER_API_URL=
         - REACT_APP_PROFILE_API_URL=
     ports:
@@ -199,9 +188,8 @@ services:
   administration-client:
     build:
       context: ./administration-client
-      dockerfile: client.Dockerfile
       args:
-        - REACT_APP_BASE_API_URL=http://host.docker.internal:8000/api
+        - REACT_APP_BASE_API_URL=http://api-gateway:8000/api
     ports:
       - 3002:80
     mem_limit: 64m
@@ -212,7 +200,6 @@ services:
   mssql:
     build:
       context: ./mssql
-      dockerfile: mssql.Dockerfile
     user: root
     environment:
       - ACCEPT_EULA=Y
@@ -220,16 +207,14 @@ services:
     mem_limit: 2.2Gb
     cpus: 0.2
     volumes:
-      - ./database/data:/var/opt/mssql/data
-      - ./database/log:/var/opt/mssql/log
-      - ./database/secrets:/var/opt/mssql/secrets
+      - mssql-data:/var/opt/mssql/data
     ports:
       - 1433:1433
     networks:
       - airport-transfer
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.9.11-management-alpine
     mem_limit: 256m
     cpus: 0.1
     ports:
@@ -241,3 +226,9 @@ services:
 networks:
   airport-transfer:
     driver: bridge
+
+volumes:
+  uploads:
+    driver: local
+  mssql-data:
+    driver: local
